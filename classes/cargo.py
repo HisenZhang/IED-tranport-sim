@@ -1,5 +1,5 @@
 class Cargo:
-    def __init__(self,content,weight,dimensions,qty=0):
+    def __init__(self,content,weight,dimensions,qty):
         self.content = content
         self.weight = weight
         self.dimensions = dimensions
