@@ -1,0 +1,3 @@
+CONSTANT = {
+    'EARTH_RADIUS': 6378.137 * 1000  # meter
+}
