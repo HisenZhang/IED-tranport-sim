@@ -1,3 +1,3 @@
 CONSTANT = {
-    'EARTH_RADIUS': 6378.137 * 1000  # meter
+    'EARTH_RADIUS': 6371 * 1000 / 1609.344  # mile
 }
