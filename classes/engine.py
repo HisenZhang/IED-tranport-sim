@@ -9,9 +9,9 @@ class Engine:
     def __init__(self, name, weight, powerSourceList, powerRefillList=[]):
         self.name = name
         self.weight = weight
-        self.chargingPower = float()
         self.outputPower = float()
         self.powerSourceList = powerSourceList
+        self.powerRefillList = powerRefillList
         pass
 
     def update(self, step):
@@ -21,9 +21,9 @@ class Engine:
     def run(self, step):
         # Consume PowerSource
         isPowerSufficent = False
-        for PowerSource in self.powerSourceList:
+        for powerSource in self.powerSourceList:
             try:
-                PowerSource.consume(self.outputPower, step)
+                powerSource.consume(self.outputPower, step)
                 isPowerSufficent = True
             except PowerSourceDepletion:
                 continue
@@ -35,24 +35,43 @@ class Engine:
 class EletricEngine(Engine):
     def __init__(self):
         super(EletricEngine, self).__init__()
-        for PowerSource in self.powerSourceList:
-            if type(PowerSource) != Battery:
+        for powerSource in self.powerSourceList:
+            if type(powerSource) != Battery:
                 raise PowerSourceMismatchException
+
+        self.isDayTime = bool()
         pass
+
+    def update(self, step, isDayTime):
+        self.isDayTime = isDayTime
+        self.run(step)
 
     def run(self, step):
         # Consume PowerSource
         super().run(step)
         # Charge up (if supported)
-        for PowerSource in self.powerSourceList:
-            if type(PowerSource) == Battery:
-                PowerSource.chargeUp(self.chargingPower, step)
+        powerAvailable = float()
+        for powerRefill in self.powerRefillList:
+            powerRefill.update(self.isDayTime)
+            powerAvailable += powerRefill.getOutputPower()
+
+        for powerSource in self.powerSourceList:
+            if type(powerSource) == Battery:
+                chargingPower = powerSource.getChargingPower()
+                if powerAvailable > chargingPower:
+                    powerSource.chargeUp(step)
+                    powerAvailable -= chargingPower
+                else:
+                    # partial charge
+                    powerSource.chargeUp(step *
+                                         powerAvailable / chargingPower)
+                    break
 
 
 class GasEngine(Engine):
     def __init__(self):
         super(GasEngine, self).__init__()
-        for PowerSource in self.powerSourceList:
-            if type(PowerSource) != GasTank:
+        for powerSource in self.powerSourceList:
+            if type(powerSource) != GasTank:
                 raise PowerSourceMismatchException
         pass
