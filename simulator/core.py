@@ -4,15 +4,16 @@ from classes.vehicle import Vehicle
 
 from simulator.world import World
 
+
 class Simulator():
-    def __init__(self,step=60000,maxIteration=0):
+    def __init__(self, step=60000, maxIteration=0):
         self._counter = 0
         self._maxIteration = maxIteration
         self._step = step
         self._clock = 0     # clock = counter * step
         self._run = True
-        self.world = World()      
-    
+        self.world = World()
+
     def update(self):
         if self._maxIteration != 0:
             if self._counter >= self._maxIteration:

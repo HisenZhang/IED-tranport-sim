@@ -1,5 +1,5 @@
 class Vehicle:
-    def __init__(self,engine,carWeight,trailerWeight,volume,loadList):
+    def __init__(self, engine, carWeight, trailerWeight, volume, loadList):
         self.carWeight = carWeight
         self.weight = carWeight
         self.trailerWeight = trailerWeight
@@ -17,7 +17,7 @@ class Vehicle:
             weightSum += item.weight
         self.weight = weightSum + self.carWeight
 
-    def load(self,objectList):
+    def load(self, objectList):
         self.loadList.extend(objectList)
         self._updateWeight()
 
@@ -26,10 +26,3 @@ class Vehicle:
         for item in self.loadList:
             retString += item.__str__()
         return retString
-
-
-
-
-
-    
-
