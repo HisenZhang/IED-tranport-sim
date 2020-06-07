@@ -1,7 +1,7 @@
 from classes.cargo import Cargo
 from classes.engine import EletricEngine, GasEngine
 from classes.vehicle import Vehicle
-from classes.powersource import Battery, GasTank
+from classes.PowerSource import Battery, GasTank
 
 
 class Model:

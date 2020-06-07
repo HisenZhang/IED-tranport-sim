@@ -2,17 +2,17 @@ class PowerFailure(Exception):
     pass
 
 
-class PowersourceDepletion(PowerFailure):
+class PowerSourceDepletion(PowerFailure):
     pass
 
 
-class BatteryDepletionException(PowersourceDepletion):
+class BatteryDepletionException(PowerSourceDepletion):
     pass
 
 
-class GasDepletionException(PowersourceDepletion):
+class GasDepletionException(PowerSourceDepletion):
     pass
 
 
-class PowersourceMismatchException(PowerFailure):
+class PowerSourceMismatchException(PowerFailure):
     pass
