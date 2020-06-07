@@ -25,7 +25,7 @@ class Path:
 
     def getDistance(self,waypoint1,waypoint2):
 
-        # distance between to points over a sphere
+        # distance between two points over a sphere
         # https://en.wikipedia.org/wiki/Great-circle_distance
         
         lat1, lng1 = waypoint1.getCoordinate()
