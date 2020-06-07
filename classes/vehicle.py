@@ -15,7 +15,8 @@ class Vehicle:
         weightSum = 0
         for item in self.loadList:
             weightSum += item.weight
-        self.weight = weightSum + self.carWeight
+        self.weight = weightSum + self.carWeight + \
+            self.trailerWeight + self.engine.weight
 
     def load(self, objectList):
         self.loadList.extend(objectList)
