@@ -10,7 +10,6 @@ class Simulator():
         self._maxIteration = maxIteration
         self._step = step
         self._clock = 0     # clock = counter * step
-        # self._isDaytime = True
         self._run = True
         self.world = World()      
     
@@ -20,9 +19,7 @@ class Simulator():
                 self._stop()
         self._counter += 1
         self._clock += self._step
-        
-        # TODO isDaytime
-        # TODO setup
+        self.world.update()
 
     def isRunning(self):
         return self._run
