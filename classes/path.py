@@ -18,7 +18,7 @@ class Coordinate:
 
 
 class Path:
-    def __init__(self, coordinateList):
+    def __init__(self, coordinateList=[]):
         self._waypointList = list()
         self._waypointList.extend(coordinateList)
         pass
