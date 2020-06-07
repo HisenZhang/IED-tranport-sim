@@ -40,7 +40,7 @@ class Path:
         s = s * CONSTANT['EARTH_RADIUS']
         return s
 
-    def __len__(self):
+    def getPathLength(self):
 
         # total length of the path
         # consecutive element pairing  
