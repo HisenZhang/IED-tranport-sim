@@ -6,12 +6,12 @@ class Engine:
 
     # Engine and PowerSource management
 
-    def __init__(self, name, weight, PowerSourceList):
+    def __init__(self, name, weight, powerSourceList, powerRefillList=[]):
         self.name = name
         self.weight = weight
         self.chargingPower = float()
         self.outputPower = float()
-        self.PowerSourceList = PowerSourceList
+        self.powerSourceList = powerSourceList
         pass
 
     def update(self, step):
@@ -21,7 +21,7 @@ class Engine:
     def run(self, step):
         # Consume PowerSource
         isPowerSufficent = False
-        for PowerSource in self.PowerSourceList:
+        for PowerSource in self.powerSourceList:
             try:
                 PowerSource.consume(self.outputPower, step)
                 isPowerSufficent = True
@@ -35,7 +35,7 @@ class Engine:
 class EletricEngine(Engine):
     def __init__(self):
         super(EletricEngine, self).__init__()
-        for PowerSource in self.PowerSourceList:
+        for PowerSource in self.powerSourceList:
             if type(PowerSource) != Battery:
                 raise PowerSourceMismatchException
         pass
@@ -44,7 +44,7 @@ class EletricEngine(Engine):
         # Consume PowerSource
         super().run(step)
         # Charge up (if supported)
-        for PowerSource in self.PowerSourceList:
+        for PowerSource in self.powerSourceList:
             if type(PowerSource) == Battery:
                 PowerSource.chargeUp(self.chargingPower, step)
 
@@ -52,7 +52,7 @@ class EletricEngine(Engine):
 class GasEngine(Engine):
     def __init__(self):
         super(GasEngine, self).__init__()
-        for PowerSource in self.PowerSourceList:
+        for PowerSource in self.powerSourceList:
             if type(PowerSource) != GasTank:
                 raise PowerSourceMismatchException
         pass
