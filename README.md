@@ -1,6 +1,6 @@
 # IED-tranport-sim
 
-This Simulator is designed for IED transportation question Summer 2020 @ RPI
+This simulator is designed for IED transportation question Summer 2020 @ RPI
 
 ## Transportation Challenge
 This section is excerpted from IED *Virtual Mini-Projects* by The Design Lab at Rensselaer.
