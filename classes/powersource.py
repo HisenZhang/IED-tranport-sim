@@ -24,13 +24,16 @@ class Battery(PowerSource):
         self.chargingPower = chargingPower
         pass
 
-    def chargeUp(self, chargingPower, charingTime):
+    def getChargingPower(self):
+        return self.chargingPower
+
+    def chargeUp(self, charingTime):
         # charingTime = step
-        delta = self.remaining + chargingPower * charingTime
-        if delta > self.capacity:
+        energyAvailable = self.chargingPower * charingTime
+        if energyAvailable > self.capacity:
             self.remaining = self.capacity  # fully charged
         else:
-            self.remaining += delta
+            self.remaining += energyAvailable
 
     def consume(self, outputPower, consumingTime):
         try:
@@ -67,6 +70,13 @@ class SolarPanel(PowerRefill):
     def __init__(self, *args):
         super(SolarPanel, *args, self).__init__()
         self.outputPower = float()
+
+    def update(self, isDayTime):
+        if isDayTime:
+            # power may vary depending on light condition
+            self.outputPower = self.maxOutputPower
+        else:
+            self.outputPower = 0.0
 
     def getOutputPower(self):
         if self.outputPower < self.maxOutputPower:
