@@ -1,13 +1,19 @@
-from classes.exceptions import BatteryDepletionException, GasDepletionException
+from classes.exceptions import PowerSourceDepletion, BatteryDepletionException, GasDepletionException
 
 
 class PowerSource():
-    def __init__(self, capacity, weight, qty):
-        self.quantity = qty
-        self.weight = weight * qty
-        self.capacity = capacity * qty
-        self.remaining = capacity * qty
+    def __init__(self, capacity, weight):
+        self.weight = weight
+        self.capacity = capacity
+        self.remaining = capacity
         pass
+
+    def consume(self, outputPower, consumingTime):
+        # consumingTime = step
+        if self.remaining > (outputPower * consumingTime):
+            self.remaining -= (outputPower * consumingTime)
+        else:
+            raise PowerSourceDepletion
 
 
 class Battery(PowerSource):
@@ -18,18 +24,18 @@ class Battery(PowerSource):
         self.chargingPower = chargingPower
         pass
 
-    def chargeUp(self, charingTime):
+    def chargeUp(self, chargingPower, charingTime):
         # charingTime = step
-        if (self.remaining + self.chargingPower * charingTime) > self.capacity:
-            self.remaining = self.capacity
+        delta = self.remaining + chargingPower * charingTime
+        if delta > self.capacity:
+            self.remaining = self.capacity  # fully charged
         else:
-            self.remaining += (self.chargingPower * charingTime)
+            self.remaining += delta
 
-    def comsume(self, outputPower, comsumingTime):
-        # comsumingTime = step
-        if self.remaining > (outputPower * comsumingTime):
-            self.remaining -= (outputPower * comsumingTime)
-        else:
+    def consume(self, outputPower, consumingTime):
+        try:
+            super().consume(outputPower, consumingTime)
+        except PowerSourceDepletion:
             raise BatteryDepletionException
 
 
@@ -40,9 +46,9 @@ class GasTank(PowerSource):
         self.weight += gasWeight * self.capacity
         pass
 
-    def comsume(self, outputPower, comsumingTime):
-        # comsumingTime = step
-        if self.remaining > (outputPower * comsumingTime):
-            self.remaining -= (outputPower * comsumingTime)
-        else:
+    def consume(self, outputPower, consumingTime):
+        try:
+            super().consume(outputPower, consumingTime)
+        except PowerSourceDepletion:
             raise GasDepletionException
+
