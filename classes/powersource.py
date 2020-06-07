@@ -52,3 +52,24 @@ class GasTank(PowerSource):
         except PowerSourceDepletion:
             raise GasDepletionException
 
+
+class PowerRefill():
+    def __init__(self, weight, maxOutputPower):
+        self.weight = weight
+        self.isAvailable = bool()
+        self.maxOutputPower = maxOutputPower
+
+    def getOutputPower(self):
+        pass
+
+
+class SolarPanel(PowerRefill):
+    def __init__(self, *args):
+        super(SolarPanel, *args, self).__init__()
+        self.outputPower = float()
+
+    def getOutputPower(self):
+        if self.outputPower < self.maxOutputPower:
+            return self.outputPower
+        else:
+            return self.maxOutputPower
