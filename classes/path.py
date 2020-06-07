@@ -25,7 +25,7 @@ class Path:
 
     def getDistance(self,waypoint1,waypoint2):
 
-        # distance between to points over a sphere
+        # distance between two points over a sphere
         # https://en.wikipedia.org/wiki/Great-circle_distance
         
         lat1, lng1 = waypoint1.getCoordinate()
@@ -37,7 +37,7 @@ class Path:
         b = math.radians(lng1) - math.radians(lng2)
         s = 2 * math.asin(math.sqrt(math.pow(math.sin(a/2), 2) + 
             math.cos(radLat1) * math.cos(radLat2) * math.pow(math.sin(b/2), 2)))
-        s = s * CONSTANT['EARTH_REDIUS']
+        s = s * CONSTANT['EARTH_RADIUS']
         return s
 
     def __len__(self):
