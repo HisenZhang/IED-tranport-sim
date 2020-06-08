@@ -20,8 +20,8 @@ class Model:
         # TODO vehicle
 
         # cargo
-        self.mask = Cargo('Mask', 0.525, [5.625, 5.625, 8], 1)
-        self.ventilator = Cargo('ventilator', 25, [24, 12, 24], 1)
+        self.mask = Cargo('Mask', 0.525, [5.625, 5.625, 8])
+        self.ventilator = Cargo('ventilator', 25, [24, 12, 24])
 
         # TODO path
 
