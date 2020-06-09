@@ -38,12 +38,7 @@ class EletricEngine(Engine):
         for powerSource in self.powerSourceList:
             if type(powerSource) != Battery:
                 raise PowerSourceMismatchException
-
-        self.isDayTime = bool()
         pass
-
-    def update(self, step):
-        self.run(step)
 
     def run(self, step):
         # Consume PowerSource
@@ -51,7 +46,7 @@ class EletricEngine(Engine):
         # Charge up (if supported)
         powerAvailable = float()
         for powerRefill in self.powerRefillList:
-            powerRefill.update(self.isDayTime)
+            powerRefill.update()
             powerAvailable += powerRefill.getOutputPower()
 
         for powerSource in self.powerSourceList:
