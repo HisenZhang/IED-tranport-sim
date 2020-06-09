@@ -1,7 +1,7 @@
 from classes.cargo import Cargo
 from classes.engine import EletricEngine, GasEngine
 from classes.vehicle import Vehicle
-from classes.powersource import Battery, GasTank
+from classes.powersource import Battery, GasTank, SolarPanel
 from classes.path import Coordinate, Path
 
 
@@ -15,8 +15,13 @@ class Model:
         self.battery = Battery(90, 1200, 1, chargingPower=600)  # kWh,lb,qty,w
         # gal,lb,qty,pound per gallon
         self.gastank = GasTank(25, 24, 1, gasWeight=6)
+        # lb,w
+        self.solarPanel = SolarPanel(44.5, 315)
 
         # TODO engine
+        self.electricEngine = EletricEngine(
+            'EE1', 150, [self.battery], [self.solarPanel])
+        self.gasEngine = GasEngine('GE1', 449, [self.gastank])
 
         # TODO vehicle
 
