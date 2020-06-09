@@ -12,24 +12,22 @@ class Model:
     def __init__(self):
         # make instances
         # power source
-        self.battery = Battery(90, 1200, 1, chargingPower=600)  # kWh,lb,qty,w
+        self.battery = Battery(90, 60, 1, chargingPower=0.6)  # kWh,lb,qty,kw
         # gal,lb,qty,pound per gallon
         self.gastank = GasTank(25, 24, 1, gasWeight=6)
         # lb,w
         self.solarPanel = SolarPanel(44.5, 315)
 
-        # TODO engine
         self.electricEngine = EletricEngine(
             'EE1', 150, [self.battery], [self.solarPanel])
         self.gasEngine = GasEngine('GE1', 449, [self.gastank])
 
-        # TODO vehicle
+        self.mask = Cargo('Mask', 0.525, (5.625, 5.625, 8))
+        self.ventilator = Cargo('Ventilator', 25, (24, 12, 24))
 
-        # cargo
-        self.mask = Cargo('Mask', 0.525, [5.625, 5.625, 8])
-        self.ventilator = Cargo('ventilator', 25, [24, 12, 24])
+        self.vehicle = Vehicle(4600-25-449, 1920, 536.4+396,
+                               [self.gasEngine, self.gastank, self.mask*10, self.ventilator*10])
 
-        # TODO path
         departure = Coordinate(32.71573611111111, -117.161086111111120)
         destination = Coordinate(42.65258055555555, -73.75623333333333)
         monument = Coordinate(36.998980555555555, -109.04518611111111)

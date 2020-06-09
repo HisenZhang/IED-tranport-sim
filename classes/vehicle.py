@@ -4,7 +4,7 @@ class Vehicle:
         self.weight = carWeight
         self.trailerWeight = trailerWeight
         self.volume = volume
-        self.loadList = loadList
+        self.loadList = loadList  # TODO check load constraints
         self._updateWeight()
 
         self.velocity = 0
