@@ -8,6 +8,10 @@ class Cargo:
         self.volume = dimensions[0] * dimensions[1] * dimensions[2]
         pass
 
+    def update(self, step):
+        # Cargo does not vary (and should not!) along the way
+        pass
+
     def __str__(self):
         return "[Content] " + self.content + \
             "\n[Weight] " + str(self.weight) + \
