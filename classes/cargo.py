@@ -1,3 +1,6 @@
+import copy
+
+
 class Cargo:
     def __init__(self, content, weight, dimensions):
         self.content = content
@@ -11,6 +14,12 @@ class Cargo:
     def update(self, step):
         # Cargo does not vary (and should not!) along the way
         pass
+
+    def __mul__(self, qty):
+        cargoList = list()
+        for _ in range(qty):
+            cargoList.append(copy.deepcopy(self))
+        return cargoList
 
     def __str__(self):
         return "[Content] " + self.content + \
