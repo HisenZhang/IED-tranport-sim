@@ -1,10 +1,12 @@
 from classes.exceptions import PowerSourceDepletion, BatteryDepletionException, GasDepletionException
+from classes.conversion import MPHtoMPG
 from simulator.status import GLOBAL
 
 
 class PowerSource():
     def __init__(self, capacity, weight):
-        self.weight = weight
+        self.containerWeight = weight
+        self.weight = 0
         self.capacity = capacity
         self.remaining = capacity
         pass
@@ -47,14 +49,22 @@ class GasTank(PowerSource):
     # gasWeight: pound per gallon
     def __init__(self, *args, gasWeight):
         super(GasTank, *args, self).__init__()
-        self.weight += gasWeight * self.capacity
+        self.gasWeight = gasWeight
+        self._updateWeight()
         pass
 
-    def consume(self, outputPower, consumingTime):
-        try:
-            super().consume(outputPower, consumingTime)
-        except PowerSourceDepletion:
+    def consume(self, speed, consumingTime):
+        # consumingTime = step
+        burnRate = speed * MPHtoMPG(speed) / 60 / \
+            60 / 1000  # Gallon per millisecond
+        if self.remaining > (burnRate * consumingTime):
+            self.remaining -= (burnRate * consumingTime)
+            self._updateWeight()
+        else:
             raise GasDepletionException
+
+    def _updateWeight(self):
+        self.weight = self.containerWeight + self.gasWeight * self.remaining
 
 
 class PowerRefill():
