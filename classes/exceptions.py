@@ -16,3 +16,7 @@ class GasDepletionException(PowerSourceDepletion):
 
 class PowerSourceMismatchException(PowerFailure):
     pass
+
+
+class ConversionFailure(Exception):
+    pass
