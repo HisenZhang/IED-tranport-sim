@@ -33,8 +33,8 @@ class Engine:
 
 
 class EletricEngine(Engine):
-    def __init__(self):
-        super(EletricEngine, self).__init__()
+    def __init__(self, *args):
+        super(EletricEngine, *args, self).__init__()
         for powerSource in self.powerSourceList:
             if type(powerSource) != Battery:
                 raise PowerSourceMismatchException
@@ -69,8 +69,8 @@ class EletricEngine(Engine):
 
 
 class GasEngine(Engine):
-    def __init__(self):
-        super(GasEngine, self).__init__()
+    def __init__(self, *args):
+        super(GasEngine, *args, self).__init__()
         for powerSource in self.powerSourceList:
             if type(powerSource) != GasTank:
                 raise PowerSourceMismatchException
