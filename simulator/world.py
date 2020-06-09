@@ -1,5 +1,5 @@
 from simulator.model import Model
-from simulator.status import Status
+from simulator.status import GLOBAL
 
 
 class World:
@@ -8,7 +8,6 @@ class World:
 
     def __init__(self):
         self.model = Model()
-        self.status = Status()
         pass
 
     def update(self):

@@ -1,4 +1,5 @@
 from classes.exceptions import PowerSourceDepletion, BatteryDepletionException, GasDepletionException
+from simulator.status import GLOBAL
 
 
 class PowerSource():
@@ -71,8 +72,8 @@ class SolarPanel(PowerRefill):
         super(SolarPanel, *args, self).__init__()
         self.outputPower = float()
 
-    def update(self, isDayTime):
-        if isDayTime:
+    def update(self, step):
+        if GLOBAL['isDayTime']:
             # power may vary depending on light condition
             self.outputPower = self.maxOutputPower
         else:

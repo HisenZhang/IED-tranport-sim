@@ -42,8 +42,7 @@ class EletricEngine(Engine):
         self.isDayTime = bool()
         pass
 
-    def update(self, step, isDayTime):
-        self.isDayTime = isDayTime
+    def update(self, step):
         self.run(step)
 
     def run(self, step):
