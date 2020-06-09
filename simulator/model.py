@@ -1,7 +1,8 @@
 from classes.cargo import Cargo
 from classes.engine import EletricEngine, GasEngine
 from classes.vehicle import Vehicle
-from classes.PowerSource import Battery, GasTank
+from classes.powersource import Battery, GasTank
+from classes.path import Coordinate, Path
 
 
 class Model:
@@ -24,5 +25,12 @@ class Model:
         self.ventilator = Cargo('ventilator', 25, [24, 12, 24])
 
         # TODO path
+        departure = Coordinate(32.71573611111111, -117.161086111111120)
+        destination = Coordinate(42.65258055555555, -73.75623333333333)
+        monument = Coordinate(36.998980555555555, -109.04518611111111)
+
+        self.pathA = Path([departure, destination])
+        self.pathB = Path([departure, monument, destination])
+        self.PathC = Path()  # TODO leave blank until inclined road implementation's ready
 
         pass
