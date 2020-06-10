@@ -1,8 +1,9 @@
+from classes.simobject import SimObject
 from simulator.constant import CONSTANT
 import math
 
 
-class Coordinate:
+class Coordinate(SimObject):
     def __init__(self, latitude, longtitude):
         self._latitude = latitude
         self._longtitude = longtitude
@@ -17,7 +18,7 @@ class Coordinate:
         return self._longtitude
 
 
-class Path:
+class Path(SimObject):
     def __init__(self, coordinateList=[]):
         self._waypointList = list()
         self._waypointList.extend(coordinateList)

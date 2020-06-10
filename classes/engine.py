@@ -1,20 +1,22 @@
-from classes.PowerSource import GasTank, Battery
+from classes.simobject import SimObject
+from classes.powersource import GasTank, Battery
 from classes.exceptions import PowerSourceMismatchException, PowerSourceDepletion
 
 
-class Engine:
+class Engine(SimObject):
 
     # Engine and PowerSource management
 
     def __init__(self, name, weight, powerSourceList, powerRefillList=[]):
         self.name = name
         self.weight = weight
-        self.outputPower = float()
-        self.powerSourceList = powerSourceList
-        self.powerRefillList = powerRefillList
+        self.consumeRate = float()
+        self.powerSourceList = self._flattenList(powerSourceList)
+        self.powerRefillList = self._flattenList(powerRefillList)
         pass
 
-    def update(self, step):
+    def update(self, consumeRate, step):
+        self.consumeRate = consumeRate
         self.run(step)
         pass
 
@@ -23,8 +25,9 @@ class Engine:
         isPowerSufficent = False
         for powerSource in self.powerSourceList:
             try:
-                powerSource.consume(self.outputPower, step)
+                powerSource.consume(self.consumeRate, step)
                 isPowerSufficent = True
+                break
             except PowerSourceDepletion:
                 continue
         if not isPowerSufficent:
@@ -33,10 +36,11 @@ class Engine:
 
 
 class EletricEngine(Engine):
-    def __init__(self, *args):
-        super(EletricEngine, *args, self).__init__()
+    def __init__(self,  name, weight, powerSourceList, powerRefillList=[]):
+        super(EletricEngine, self).__init__(
+            name, weight, powerSourceList, powerRefillList=[])
         for powerSource in self.powerSourceList:
-            if type(powerSource) != Battery:
+            if not isinstance(powerSource, Battery):
                 raise PowerSourceMismatchException
         pass
 
@@ -50,7 +54,7 @@ class EletricEngine(Engine):
             powerAvailable += powerRefill.getOutputPower()
 
         for powerSource in self.powerSourceList:
-            if type(powerSource) == Battery:
+            if isinstance(powerSource, Battery):
                 chargingPower = powerSource.getChargingPower()
                 if powerAvailable > chargingPower:
                     powerSource.chargeUp(step)
@@ -63,9 +67,10 @@ class EletricEngine(Engine):
 
 
 class GasEngine(Engine):
-    def __init__(self, *args):
-        super(GasEngine, *args, self).__init__()
+    def __init__(self,  name, weight, powerSourceList, powerRefillList=[]):
+        super(GasEngine, self).__init__(
+            name, weight, powerSourceList, powerRefillList=[])
         for powerSource in self.powerSourceList:
-            if type(powerSource) != GasTank:
+            if not isinstance(powerSource, GasTank):
                 raise PowerSourceMismatchException
         pass

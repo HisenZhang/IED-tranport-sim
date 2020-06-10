@@ -1,28 +1,33 @@
+from classes.simobject import SimObject
 from classes.exceptions import PowerSourceDepletion, BatteryDepletionException, GasDepletionException
 from classes.conversion import MPHtoMPG
 from simulator.status import GLOBAL
 
 
-class PowerSource():
+class PowerSource(SimObject):
     def __init__(self, capacity, weight):
         self.containerWeight = weight
-        self.weight = 0
+        self.weight = self.containerWeight
         self.capacity = capacity
         self.remaining = capacity
         pass
 
-    def consume(self, outputPower, consumingTime):
+    def consume(self, consumeRate, consumingTime):
         # consumingTime = step
-        if self.remaining > (outputPower * consumingTime):
-            self.remaining -= (outputPower * consumingTime)
+        if self.remaining > (consumeRate * consumingTime):
+            self.remaining -= (consumeRate * consumingTime)
+            self._updateWeight()
         else:
             raise PowerSourceDepletion
+
+    def _updateWeight(self):
+        pass
 
 
 class Battery(PowerSource):
     # battery weight includes solar panel
-    def __init__(self, *args, chargingPower):
-        super(Battery, *args, self).__init__()
+    def __init__(self, capacity, weight, chargingPower):
+        super(Battery, self).__init__(capacity, weight)
         self.isCharging = False
         self.chargingPower = chargingPower
         pass
@@ -44,30 +49,29 @@ class Battery(PowerSource):
         except PowerSourceDepletion:
             raise BatteryDepletionException
 
+    def _updateWeight(self):
+        pass
+
 
 class GasTank(PowerSource):
     # gasWeight: pound per gallon
-    def __init__(self, *args, gasWeight):
-        super(GasTank, *args, self).__init__()
+    def __init__(self, capacity, weight, gasWeight):
+        super(GasTank, self).__init__(capacity, weight)
         self.gasWeight = gasWeight
         self._updateWeight()
         pass
 
-    def consume(self, speed, consumingTime):
-        # consumingTime = step
-        burnRate = speed * MPHtoMPG(speed) / 60 / \
-            60 / 1000  # Gallon per millisecond
-        if self.remaining > (burnRate * consumingTime):
-            self.remaining -= (burnRate * consumingTime)
-            self._updateWeight()
-        else:
+    def consume(self, consumeRate, consumingTime):
+        try:
+            super().consume(consumeRate, consumingTime)
+        except PowerSourceDepletion:
             raise GasDepletionException
 
     def _updateWeight(self):
         self.weight = self.containerWeight + self.gasWeight * self.remaining
 
 
-class PowerRefill():
+class PowerRefill(SimObject):
     def __init__(self, weight, maxOutputPower):
         self.weight = weight
         self.isAvailable = bool()
@@ -78,8 +82,8 @@ class PowerRefill():
 
 
 class SolarPanel(PowerRefill):
-    def __init__(self, *args):
-        super(SolarPanel, *args, self).__init__()
+    def __init__(self, weight, maxOutputPower):
+        super(SolarPanel, self).__init__(weight, maxOutputPower)
         self.outputPower = float()
 
     def update(self, step):

@@ -12,15 +12,15 @@ class Model:
     def __init__(self):
         # make instances
         # power source
-        self.battery = Battery(90, 60, 1, chargingPower=0.6)  # kWh,lb,qty,kw
-        # gal,lb,qty,pound per gallon
-        self.gastank = GasTank(25, 24, 1, gasWeight=6)
+        self.battery = Battery(90, 60, 0.6)  # kWh,lb,kw
+        # gal,lb,pound per gallon
+        self.gastank = GasTank(25, 24, 6)
         # lb,w
         self.solarPanel = SolarPanel(44.5, 315)
 
         self.electricEngine = EletricEngine(
             'EE1', 150, [self.battery], [self.solarPanel])
-        self.gasEngine = GasEngine('GE1', 449, [self.gastank])
+        self.gasEngine = GasEngine('GE1', 449, [self.gastank * 6])
 
         self.mask = Cargo('Mask', 0.525, (5.625, 5.625, 8))
         self.ventilator = Cargo('Ventilator', 25, (24, 12, 24))

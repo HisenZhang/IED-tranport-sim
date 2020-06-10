@@ -1,18 +1,27 @@
-class Vehicle:
+from classes.simobject import SimObject
+from classes.engine import Engine
+from classes.conversion import MPHtoMPG
+
+
+class Vehicle(SimObject):
     def __init__(self, carWeight, trailerWeight, volume, loadList):
         self.carWeight = carWeight
         self.weight = carWeight
         self.trailerWeight = trailerWeight
         self.volume = volume
-        self.loadList = loadList  # TODO check load constraints
+        # flattening loadList
+        self.loadList = self._flattenList(loadList)
+        # TODO check load constraints
         self._updateWeight()
 
-        self.velocity = 0
-        self.power = 0
+        self.velocity = 0.0
 
-    def update(self, isDayTime):
+    def update(self, velocity, step):
         for load in self.loadList:
-            load.update()
+            if isinstance(load, Engine):
+                # Speed / Fuel Efficiency -> Gallon / Hour -> Gallon / millsec
+                consumeRate = velocity / MPHtoMPG(velocity) / 3600 / 1000
+                load.update(consumeRate, step)
 
     def _updateWeight(self):
         weightSum = 0

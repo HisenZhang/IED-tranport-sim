@@ -20,3 +20,7 @@ class PowerSourceMismatchException(PowerFailure):
 
 class ConversionFailure(Exception):
     pass
+
+
+class DestinationReached(Exception):
+    pass
