@@ -6,7 +6,7 @@ from classes.conversion import MPHtoMPG
 class Vehicle(SimObject):
     def __init__(self, carWeight, trailerWeight, volume, loadList):
         self.carWeight = carWeight
-        self.weight = carWeight
+        self.weight = float()
         self.trailerWeight = trailerWeight
         self.volume = volume
         # flattening loadList
@@ -21,7 +21,11 @@ class Vehicle(SimObject):
         for load in self.loadList:
             if isinstance(load, Engine):
                 fuelEfficiency = MPHtoMPG(velocity)
+<<<<<<< Updated upstream
                 fuelEfficiency = (-0.5 / 10000) * self.weight
+=======
+                fuelEfficiency += (-0.5 / 10000) * self.weight
+>>>>>>> Stashed changes
 
                 assert fuelEfficiency > 0
 
