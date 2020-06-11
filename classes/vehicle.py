@@ -17,17 +17,23 @@ class Vehicle(SimObject):
         self.velocity = 0.0
 
     def update(self, velocity, step):
+        self._updateWeight()
         for load in self.loadList:
             if isinstance(load, Engine):
+                fuelEfficiency = MPHtoMPG(velocity)
+                fuelEfficiency = (-0.5 / 10000) * self.weight
+
+                assert fuelEfficiency > 0
+
                 # Speed / Fuel Efficiency -> Gallon / Hour -> Gallon / millsec
-                consumeRate = velocity / MPHtoMPG(velocity) / 3600 / 1000
+                consumeRate = velocity / fuelEfficiency / 3600 / 1000
                 load.update(consumeRate, step)
 
     def _updateWeight(self):
         weightSum = 0
         for item in self.loadList:
             weightSum += item.weight
-        self.weight = weightSum + self.carWeight + self.trailerWeight
+        self.weight = weightSum + self.trailerWeight  # carWeight is considered builtin
 
     def load(self, objectList):
         self.loadList.extend(objectList)
