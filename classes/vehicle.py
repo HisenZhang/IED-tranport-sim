@@ -21,11 +21,7 @@ class Vehicle(SimObject):
         for load in self.loadList:
             if isinstance(load, Engine):
                 fuelEfficiency = MPHtoMPG(velocity)
-<<<<<<< Updated upstream
-                fuelEfficiency = (-0.5 / 10000) * self.weight
-=======
                 fuelEfficiency += (-0.5 / 10000) * self.weight
->>>>>>> Stashed changes
 
                 assert fuelEfficiency > 0
 
