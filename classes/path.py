@@ -19,9 +19,14 @@ class Coordinate(SimObject):
 
 
 class Path(SimObject):
-    def __init__(self, coordinateList=[]):
+    def __init__(self, coordinateList=[], incline=[]):
         self._waypointList = list()
         self._waypointList.extend(coordinateList)
+        self._inclineList = list()
+        self._inclineList.extend(self._flattenList(incline))
+        self._location = 0.0
+        self._segment = 0
+        self._segmentPreCalcList = list()
         pass
 
     def getDistance(self, waypoint1, waypoint2):
@@ -45,10 +50,31 @@ class Path(SimObject):
 
         # total length of the path
         # consecutive element pairing
-        waypointPairs = [(self._waypointList[i], self._waypointList[i + 1])
-                         for i in range(len(self._waypointList) - 1)]
 
+        waypointPairs = self._getWaypointPairs()
         pathLength = float()
         for pairs in waypointPairs:
             pathLength += self.getDistance(pairs[0], pairs[1])
         return pathLength
+
+    def update(self, distanceTraveled):
+        self._location += distanceTraveled
+        for cumulativeDistance in self._segmentPreCalcList:
+            if self._location < cumulativeDistance:
+                self._segment = self._segmentPreCalcList.index(
+                    cumulativeDistance)
+            break
+
+    def getIncline(self):
+        return self._inclineList[self._segment]
+
+    def _segmentPreCalc(self):
+        cumulativeDistance = float()
+        waypointPairs = self._getWaypointPairs()
+        for pair in waypointPairs:
+            cumulativeDistance += self.getDistance(pair[0], pair[1])
+            self._segmentPreCalcList.append(cumulativeDistance)
+
+    def _getWaypointPairs(self):
+        return [(self._waypointList[i], self._waypointList[i + 1])
+                for i in range(len(self._waypointList) - 1)]
