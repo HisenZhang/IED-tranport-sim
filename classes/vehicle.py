@@ -16,7 +16,7 @@ class Vehicle(SimObject):
 
         self.velocity = 0.0
 
-    def update(self, velocity, step):
+    def update(self, velocity, incline, step):
         self._updateWeight()
         for load in self.loadList:
             if isinstance(load, Engine):
