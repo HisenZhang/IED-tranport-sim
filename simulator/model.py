@@ -40,6 +40,7 @@ class Model:
         self.PathC = Path([departure, destination], [3, -3]*22)
 
         tz_PST = pytz.timezone('America/Los_Angeles')
-        self.departDatetime = datetime(2020, 8, 31, 12, 00, tzinfo=tz_PST)
+        self.departDatetime = datetime(
+            2020, 8, 31, 12, 00, tzinfo=tz_PST).astimezone(pytz.utc)
 
     pass

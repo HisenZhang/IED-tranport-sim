@@ -14,6 +14,8 @@ class Simulator():
         self._maxIteration = maxIteration
         self._step = step
         self._clock = 0     # clock = counter * step
+        self._DATE_FORMAT = "%Y-%m-%d %H:%M:%S %Z%z"
+
         self._run = True
         self.world = World()
 
@@ -29,8 +31,8 @@ class Simulator():
 
         try:
             self.world.update(self._step)
-            logging.info("Time " + str(self._clock // 1000) +
-                         " sec, Distance traveled " + str(round(self.world.distanceTraveled, 1)) + " miles.")
+            logging.info(self.world.time.strftime(self._DATE_FORMAT) +
+                         " Distance traveled " + str(round(self.world.distanceTraveled, 1)) + " miles.")
         except DestinationReached:
             logging.critical("Destination reached after " +
                              str(self._clock) + " cycles of simulation.")

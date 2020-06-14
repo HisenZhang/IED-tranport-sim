@@ -2,6 +2,8 @@ from simulator.model import Model
 from simulator.status import GLOBAL
 from classes.exceptions import DestinationReached
 
+from datetime import timedelta
+
 
 class World:
 
@@ -14,6 +16,7 @@ class World:
 
         self.path = self.model.pathA
         self.vehicle = self.model.vehicle
+        self.time = self.model.departDatetime
         pass
 
     def update(self, step):
@@ -25,6 +28,8 @@ class World:
 
         if self.distanceTraveled > self.path.getPathLength():
             raise DestinationReached
+
+        self.time += (timedelta(milliseconds=step))
         pass
 
     def isDaytime(self):
