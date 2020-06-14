@@ -4,6 +4,9 @@ from classes.vehicle import Vehicle
 from classes.powersource import Battery, GasTank, SolarPanel
 from classes.path import Coordinate, Path
 
+from datetime import datetime
+import pytz
+
 
 class Model:
 
@@ -36,4 +39,7 @@ class Model:
         self.pathB = Path([departure, monument, destination])
         self.PathC = Path([departure, destination], [3, -3]*22)
 
-        pass
+        tz_PST = pytz.timezone('America/Los_Angeles')
+        self.departDatetime = datetime(2020, 8, 31, 12, 00, tzinfo=tz_PST)
+
+    pass
