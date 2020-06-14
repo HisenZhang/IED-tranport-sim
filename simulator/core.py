@@ -24,7 +24,7 @@ class Simulator():
     def update(self):
         if self._maxIteration != 0:
             if self._counter >= self._maxIteration:
-                logging.warning("Max iteration reached. Stop simulation.")
+                logging.critical("Max iteration reached. Stop simulation.")
                 self._stop()
 
         try:
@@ -32,8 +32,8 @@ class Simulator():
             logging.info("Time " + str(self._clock // 1000) +
                          " sec, Distance traveled " + str(round(self.world.distanceTraveled, 1)) + " miles.")
         except DestinationReached:
-            logging.warning("Destination reached after " +
-                            str(self._clock) + " cycles of simulation.")
+            logging.critical("Destination reached after " +
+                             str(self._clock) + " cycles of simulation.")
             self._stop()
         except:
             logging.error("Exception on updating world. Stop simulation.")
