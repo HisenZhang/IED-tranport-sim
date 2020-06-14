@@ -19,11 +19,11 @@ class Coordinate(SimObject):
 
 
 class Path(SimObject):
-    def __init__(self, coordinateList=[], incline=[]):
+    def __init__(self, coordinateList=[], inclineList=[]):
         self._waypointList = list()
         self._waypointList.extend(coordinateList)
         self._inclineList = list()
-        self._inclineList.extend(self._flattenList(incline))
+        self._inclineList.extend(self._flattenList(inclineList))
         self._location = 0.0
         self._segment = 0
         self._segmentPreCalcList = list()
@@ -66,7 +66,10 @@ class Path(SimObject):
             break
 
     def getIncline(self):
-        return self._inclineList[self._segment]
+        if len(self._inclineList) == 0:
+            return 0
+        else:
+            return self._inclineList[self._segment]
 
     def _segmentPreCalc(self):
         cumulativeDistance = float()
