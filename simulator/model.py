@@ -34,6 +34,6 @@ class Model:
 
         self.pathA = Path([departure, destination])
         self.pathB = Path([departure, monument, destination])
-        self.PathC = Path()  # TODO leave blank until inclined road implementation's ready
+        self.PathC = Path([departure, destination], [3, -3]*22)
 
         pass
