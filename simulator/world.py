@@ -2,6 +2,7 @@ from simulator.model import Model
 from simulator.status import GLOBAL
 from classes.exceptions import DestinationReached
 
+
 class World:
 
     # Define the mechanism of the world
@@ -10,13 +11,19 @@ class World:
         self.model = Model()
         self.velocity = float()
         self.distanceTraveled = float()
+
+        self.path = self.model.pathA
+        self.vehicle = self.model.vehicle
         pass
 
     def update(self, step):
         self.velocity = 55
-        self.model.vehicle.update(self.velocity, step)
         self.distanceTraveled += (self.velocity / 3600 / 1000 * step)
-        if self.distanceTraveled > self.model.pathA.getPathLength():
+        self.path.update(self.distanceTraveled)
+        self.vehicle.update(
+            self.velocity, self.path.getIncline(), step)
+
+        if self.distanceTraveled > self.path.getPathLength():
             raise DestinationReached
         pass
 
