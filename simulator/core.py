@@ -34,8 +34,8 @@ class Simulator():
             logging.info(self.world.time.strftime(self._DATE_FORMAT) +
                          " Distance traveled " + str(round(self.world.distanceTraveled, 1)) + " miles.")
         except DestinationReached:
-            logging.critical("Destination reached after " +
-                             str(self._clock) + " cycles of simulation.")
+            logging.critical("Destination reached after " + str(self.world.time - self.world.model.departDatetime) + " (" +
+                             str(self._clock) + " cycles of simulation)")
             self._stop()
         except:
             logging.error("Exception on updating world. Stop simulation.")
