@@ -36,11 +36,12 @@ class Model:
         monument = Coordinate(36.998980555555555, -109.04518611111111)
 
         self.pathA = Path([departure, destination])
-        self.pathB = Path([departure, monument, destination])
+        self.pathB = Path([departure, monument, destination],[.1705,.0528])
         self.PathC = Path([departure, destination], [3, -3]*22)
 
-        tz_PST = pytz.timezone('America/Los_Angeles')
+        self.tz_PST = pytz.timezone('America/Los_Angeles')
+        self.tz_UTC = pytz.utc
         self.departDatetime = datetime(
-            2020, 8, 31, 12, 00, tzinfo=tz_PST).astimezone(pytz.utc)
+            2020, 8, 31, 12, 00, tzinfo=self.tz_PST).astimezone(self.tz_UTC)
 
     pass
