@@ -71,12 +71,18 @@ class Path(SimObject):
         else:
             return self._inclineList[self._segment]
 
+    def getSegment(self):
+        return self._segment
+
     def _segmentPreCalc(self):
         cumulativeDistance = float()
         waypointPairs = self._getWaypointPairs()
         for pair in waypointPairs:
             cumulativeDistance += self.getDistance(pair[0], pair[1])
             self._segmentPreCalcList.append(cumulativeDistance)
+
+    def getWaypoint(self,index):
+        return self._waypointList[index]
 
     def _getWaypointPairs(self):
         return [(self._waypointList[i], self._waypointList[i + 1])
