@@ -3,6 +3,8 @@ from simulator.status import GLOBAL
 from classes.exceptions import DestinationReached
 
 from datetime import timedelta
+import ephem
+import math
 
 
 class World:
@@ -17,6 +19,9 @@ class World:
         self.path = self.model.pathA
         self.vehicle = self.model.vehicle
         self.time = self.model.departDatetime
+
+        self.sun = ephem.Sun()
+        self.observer = ephem.Observer()
         pass
 
     def update(self, step):
@@ -33,5 +38,20 @@ class World:
         pass
 
     def isDaytime(self):
-        # TODO isDaytime
+
+        # decide is daytime by sun altitude
+        # https://stackoverflow.com/questions/43299500/pandas-convert-datetime-timestamp-to-whether-its-day-or-night
+
+        lastWaypoint = self.path.getWaypoint(self.path.getSegment())
+        self.observer.lat = str(lastWaypoint.getLatitude())
+        self.observer.lon = str(lastWaypoint.getLongtitude())
+        self.observer.elevation = 0.0
+
+        self.observer.date = self.time  # self.time.astimezone(tz=pytz.utc)
+        self.sun.compute(self.observer)
+        sunAltitude = self.sun.alt * 180 / math.pi
+        if sunAltitude <= -6:  # civic threshold
+            return False
+        else:
+            return True
         pass
