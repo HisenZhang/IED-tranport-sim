@@ -31,12 +31,18 @@ class Simulator():
 
         try:
             self.world.update(self._step)
-            logging.info(self.world.time.strftime(self._DATE_FORMAT) +
-                         " Distance traveled " + str(round(self.world.distanceTraveled, 1)) + " miles.")
+            message = "{time} Distance traveled {distance} miles".format(
+                time = self.world.time.strftime(self._DATE_FORMAT),
+                distance = round(self.world.distanceTraveled, 1))
+            logging.info(message)
+
         except DestinationReached:
-            logging.critical("Destination reached after " + str(self.world.time - self.world.model.departDatetime) + " (" +
-                             str(self._clock) + " cycles of simulation)")
+            totalTimeTaken = self.world.time - self.world.model.departDatetime
+            message = "Destination reached after {time} ({clock} cycles of simulation)".format(
+                time = str(totalTimeTaken), clock = self._clock)
+            logging.critical(message)
             self._stop()
+
         except:
             logging.error("Exception on updating world. Stop simulation.")
             self._stop()
