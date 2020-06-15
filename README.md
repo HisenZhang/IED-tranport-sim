@@ -42,3 +42,4 @@ Our thanks to design Lab Project Engineer Aren Paster for the inspiration and wr
 
 ## Links
 Specification: https://docs.google.com/document/d/1LaZNvKz1YIbP27I2U86Uc2ULOIZnb1hrEGtUMGBAbYU/edit?usp=sharing
+Presentation Slides: https://docs.google.com/presentation/d/1TrykRP-fzg7Y4b_yn8qbw6uQtaDuw9C_kSP4d1eqRQY/edit?usp=sharing
