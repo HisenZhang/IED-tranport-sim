@@ -31,8 +31,9 @@ class Simulator():
 
         try:
             self.world.update(self._step)
-            message = "{time} Distance traveled {distance} miles".format(
+            message = "{time} {isdaytime} Distance traveled {distance} miles.".format(
                 time = self.world.time.strftime(self._DATE_FORMAT),
+                isdaytime = "Daylight" if self.world.isDaytime() else "Night",
                 distance = round(self.world.distanceTraveled, 1))
             logging.info(message)
 
