@@ -9,16 +9,27 @@ class Engine(SimObject):
 
     def __init__(self, name, weight, powerSourceList, powerRefillList=[]):
         self.name = name
+        self.engineWeight = weight
         self.weight = weight
         self.consumeRate = float()
         self.powerSourceList = self._flattenList(powerSourceList)
         self.powerRefillList = self._flattenList(powerRefillList)
+        self._updateWeight()
         pass
 
     def update(self, consumeRate, step):
         self.consumeRate = consumeRate
         self.run(step)
+        self._updateWeight()
         pass
+
+    def _updateWeight(self):
+        weightSum = 0
+        for item in self.powerSourceList:
+            weightSum += item.weight
+        for item in self.powerRefillList:
+            weightSum += item.weight
+        self.weight = weightSum + self.engineWeight
 
     def run(self, step):
         # Consume PowerSource
@@ -38,19 +49,17 @@ class Engine(SimObject):
 class EletricEngine(Engine):
     def __init__(self,  name, weight, powerSourceList, powerRefillList=[]):
         super(EletricEngine, self).__init__(
-            name, weight, powerSourceList, powerRefillList=[])
+            name, weight, powerSourceList, powerRefillList)
         for powerSource in self.powerSourceList:
             if not isinstance(powerSource, Battery):
                 raise PowerSourceMismatchException
         pass
 
     def run(self, step):
-        # Consume PowerSource
-        super().run(step)
         # Charge up (if supported)
         powerAvailable = float()
         for powerRefill in self.powerRefillList:
-            powerRefill.update()
+            powerRefill.update(step)
             powerAvailable += powerRefill.getOutputPower()
 
         for powerSource in self.powerSourceList:
@@ -64,12 +73,15 @@ class EletricEngine(Engine):
                     powerSource.chargeUp(step *
                                          powerAvailable / chargingPower)
                     break
+        # Consume PowerSource
+        super().run(step)
+
 
 
 class GasEngine(Engine):
     def __init__(self,  name, weight, powerSourceList, powerRefillList=[]):
         super(GasEngine, self).__init__(
-            name, weight, powerSourceList, powerRefillList=[])
+            name, weight, powerSourceList, powerRefillList)
         for powerSource in self.powerSourceList:
             if not isinstance(powerSource, GasTank):
                 raise PowerSourceMismatchException
