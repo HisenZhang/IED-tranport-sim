@@ -1,6 +1,6 @@
 from classes.simobject import SimObject
-from classes.engine import Engine
-from classes.conversion import MPHtoMPG
+from classes.engine import *
+from classes.conversion import *
 
 
 class Vehicle(SimObject):
@@ -11,8 +11,8 @@ class Vehicle(SimObject):
         self.volume = volume
         # flattening loadList
         self.loadList = self._flattenList(loadList)
-        # TODO check load constraints
         self._updateWeight()
+        assert self.weight < 3510 # Ford transit max payload
 
         self.velocity = 0.0
 
@@ -20,8 +20,22 @@ class Vehicle(SimObject):
         self._updateWeight()
         for load in self.loadList:
             if isinstance(load, Engine):
-                fuelEfficiency = MPHtoMPG(velocity)
-                fuelEfficiency += (-0.5 / 10000) * self.weight
+                if isinstance(load,GasEngine):
+                    fuelEfficiency = MPHtoMPG_Gas(velocity)
+                    fuelEfficiency += (-0.5 / 10000) * self.weight
+                    if incline >= 0:
+                        fuelEfficiency += (-2) * incline
+                    else:
+                        fuelEfficiency += (1.3) * incline
+
+                if isinstance(load,EletricEngine):
+                    fuelEfficiency = MPHtoMPG_Electric(velocity)
+                    fuelEfficiency += (-0.5 / 10000) * self.weight
+                    if incline >= 0:
+                        fuelEfficiency += (-2) * incline
+                    else:
+                        fuelEfficiency = 99999999 # MPGe -> infinity
+                    fuelEfficiency = MPGtoMPKWh(fuelEfficiency)
 
                 assert fuelEfficiency > 0
 
@@ -33,7 +47,7 @@ class Vehicle(SimObject):
         weightSum = 0
         for item in self.loadList:
             weightSum += item.weight
-        self.weight = weightSum + self.trailerWeight  # carWeight is considered builtin
+        self.weight = weightSum  # carWeight is considered builtin
 
     def load(self, objectList):
         self.loadList.extend(objectList)
