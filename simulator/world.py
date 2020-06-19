@@ -22,9 +22,12 @@ class World:
 
         self.sun = ephem.Sun()
         self.observer = ephem.Observer()
+
+        self.payloadAllowed = 3510 - self.vehicle.weight
         pass
 
     def update(self, step):
+        self.isDaytime()
         self.velocity = 55
         self.distanceTraveled += (self.velocity / 3600 / 1000 * step)
         self.path.update(self.distanceTraveled)
@@ -51,7 +54,9 @@ class World:
         self.sun.compute(self.observer)
         sunAltitude = self.sun.alt * 180 / math.pi
         if sunAltitude <= -6:  # civic threshold
+            GLOBAL['isDayTime'] = False
             return False
         else:
+            GLOBAL['isDayTime'] = True
             return True
         pass
