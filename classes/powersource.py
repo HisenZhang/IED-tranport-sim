@@ -1,6 +1,6 @@
 from classes.simobject import SimObject
 from classes.exceptions import PowerSourceDepletion, BatteryDepletionException, GasDepletionException
-from classes.conversion import MPHtoMPG
+from classes.conversion import *
 from simulator.status import GLOBAL
 
 
@@ -37,7 +37,7 @@ class Battery(PowerSource):
 
     def chargeUp(self, charingTime):
         # charingTime = step
-        energyAvailable = self.chargingPower * charingTime
+        energyAvailable = self.chargingPower * charingTime / 3600 / 1000
         if energyAvailable > self.capacity:
             self.remaining = self.capacity  # fully charged
         else:
