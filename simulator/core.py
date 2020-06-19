@@ -1,9 +1,10 @@
 from classes.cargo import Cargo
 from classes.engine import Engine
 from classes.vehicle import Vehicle
-from classes.exceptions import DestinationReached
+from classes.exceptions import DestinationReached, PowerSourceDepletion
 
 from simulator.world import World
+from simulator.status import GLOBAL
 
 import logging
 
@@ -31,17 +32,24 @@ class Simulator():
 
         try:
             self.world.update(self._step)
-            message = "{time} {isdaytime} Distance traveled {distance} miles.".format(
-                time = self.world.time.strftime(self._DATE_FORMAT),
-                isdaytime = "Daylight" if self.world.isDaytime() else "Night",
+            message = "{date} {isdaytime} Distance traveled {distance} miles.".format(
+                date = self.world.time.strftime(self._DATE_FORMAT),
+                isdaytime = "Daylight" if GLOBAL['isDayTime'] else "Night",
                 distance = round(self.world.distanceTraveled, 1))
             logging.info(message)
 
         except DestinationReached:
             totalTimeTaken = self.world.time - self.world.model.departDatetime
-            message = "Destination reached after {time} ({clock} cycles of simulation)".format(
-                time = str(totalTimeTaken), clock = self._clock)
+            message = "Destination reached at {date} after {time} ({clock} cycles of simulation)".format(
+                date = self.world.time.strftime(self._DATE_FORMAT),
+                time = str(totalTimeTaken), 
+                clock = self._clock)
             logging.critical(message)
+            logging.debug("Max payload = {} Distance = {}".format(self.world.payloadAllowed,round(self.world.path.getPathLength(),1)))
+            self._stop()
+
+        except PowerSourceDepletion:
+            logging.error("Power depleted. Stop simulation.")
             self._stop()
 
         except:
