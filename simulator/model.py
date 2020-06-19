@@ -15,21 +15,21 @@ class Model:
     def __init__(self):
         # make instances
         # power source
-        self.battery = Battery(90, 60, 0.6)  # kWh,lb,kw
+        self.battery = Battery(90, 60, 7.7)  # kWh,lb,kw
         # gal,lb,pound per gallon
         self.gastank = GasTank(25, 24, 6)
         # lb,w
         self.solarPanel = SolarPanel(44.5, 315)
 
         self.electricEngine = EletricEngine(
-            'EE1', 150, [self.battery], [self.solarPanel])
-        self.gasEngine = GasEngine('GE1', 449, [self.gastank * 6])
+            'EE1', 150, [self.battery * 8], [self.solarPanel * 1])
+        self.gasEngine = GasEngine('GE1', 449, [self.gastank * 9])
 
         self.mask = Cargo('Mask', 0.525, (5.625, 5.625, 8))
         self.ventilator = Cargo('Ventilator', 25, (24, 12, 24))
 
-        self.vehicle = Vehicle(4600-25-449, 1920, 536.4+396,
-                               [self.gasEngine, self.gastank, self.mask*10, self.ventilator*10])
+        #self.vehicle = Vehicle(4600-25-449, 1920, 536.4+396, [self.gasEngine])
+        self.vehicle = Vehicle(4600-25-449, 1920, 536.4+396, [self.electricEngine])
 
         departure = Coordinate(32.71573611111111, -117.161086111111120)
         destination = Coordinate(42.65258055555555, -73.75623333333333)
@@ -37,7 +37,7 @@ class Model:
 
         self.pathA = Path([departure, destination])
         self.pathB = Path([departure, monument, destination],[.1705,.0528])
-        self.PathC = Path([departure, destination], [3, -3]*22)
+        self.pathC = Path([departure, destination], [3, -3] * 22)
 
         self.tz_PST = pytz.timezone('America/Los_Angeles')
         self.tz_UTC = pytz.utc
